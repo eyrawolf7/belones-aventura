@@ -21,10 +21,10 @@ export function crearRender(canvas, mundo) {
       const n = J * mundo.W + I, e = mundo.edif[n];
       if (e) {
         const abajo = mundo.edif[n + mundo.W] === e;
-        const col = FACHADAS[Math.floor(hash2(e, 1) * FACHADAS.length)];
-        const ed = mundo.edificios[e - 1];
-        const teja = ed.anyo && ed.anyo < 1975;
-        g.fillStyle = abajo ? (teja ? '#c0603e' : '#cfc8ba') : col;
+        const ed = mundo.edificios[e - 1], a = ed.aspecto;
+        const col = a?.color || FACHADAS[Math.floor(hash2(e, 1) * FACHADAS.length)];
+        const teja = a ? a.tejado === 'tile' || a.tejado === 'flat-eave' && !mundo.edif[n - mundo.W] : ed.anyo && ed.anyo < 1975;
+        g.fillStyle = abajo ? (teja ? '#c0603e' : '#d4cdbf') : col;
         g.fillRect(i * T, j * T, T, T);
         if (!abajo) { g.fillStyle = '#4a6a86'; g.fillRect(i * T + 5, j * T + 4, 6, 6); }
         else if (mundo.edif[n - mundo.W] !== e) { g.fillStyle = '#0002'; g.fillRect(i * T, j * T, T, 2); }

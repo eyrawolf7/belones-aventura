@@ -16,6 +16,7 @@ const parcelas = leer('catastro-parcelas.json');
 const { copas } = leer('copas-tiles.json');
 const direcciones = leer('direcciones-pueblo.json');
 const negocios = leer('negocios-gmaps.json');
+const anot = leer('anotaciones.json'); // aspecto de cada fachada sacado de Street View (695 edificios)
 
 const M = 2; // metros por baldosa
 const X_OESTE = -40, X_ESTE = -880, Z_NORTE = 620, Z_SUR = -640;
@@ -121,7 +122,14 @@ const via = (v) => (v || '').replace(/^CL /, 'Calle ').replace(/^AV /, 'Avenida 
 const datosEd = edificios.map((b) => {
   const d = dirPorRef.get(b.refcat);
   const [ci, cj] = aBaldosa(...b.centroid);
-  return { ref: b.refcat, uso: b.use || '', plantas: b.maxFloors || 1, anyo: b.year ? +b.year : 0, calle: b.near?.name || (d ? via(d.via) : null), numero: d?.numero || null, c: [Math.round(ci), Math.round(cj)] };
+  const a = anot[b.refcat];
+  const aspecto = a && {
+    color: a.color, tejado: a.roof, bajo: a.ground, material: a.material, zocalo: a.plinth && a.plinth !== 'none' ? a.plinthColor || '#b9a48a' : null,
+    remate: a.trim || null, reja: a.rail || null, puerta: a.doorColor || null, toldo: a.awning || null, balcon: !!a.balcony, huecos: a.bays || null,
+    puertaEn: a.doorBay || null, arco: !!a.arch, persiana: a.blind ?? null, chimenea: !!a.chimney, valla: a.fence && a.fence !== 'none' ? { tipo: a.fence, color: a.fenceColor || null } : null,
+    bajoColor: a.groundColor || null, rotulos: (a.signs || []).map((r) => ({ t: r.texto, b: r.banda, l: r.letra })),
+  };
+  return { ref: b.refcat, uso: b.use || '', plantas: a?.floors || b.maxFloors || 1, anyo: b.year ? +b.year : 0, calle: b.near?.name || (d ? via(d.via) : null), numero: d?.numero || null, c: [Math.round(ci), Math.round(cj)], aspecto };
 });
 
 // rótulos de calle: punto medio del tramo más largo de cada nombre
@@ -171,4 +179,5 @@ const mundo = {
 fs.mkdirSync('src/data', { recursive: true });
 fs.writeFileSync('src/data/mundo.json', JSON.stringify(mundo));
 const cuenta = {}; for (const c of suelo) cuenta[c] = (cuenta[c] || 0) + 1;
+console.log(`${datosEd.filter((e) => e.aspecto).length} con aspecto real, ${datosEd.filter((e) => e.aspecto?.rotulos.length).length} con rótulos`);
 console.log(`mundo ${W}x${H} baldosas (${W * M}x${H * M} m), ${edificios.length} edificios, ${arboles.length} árboles, ${Object.keys(rotulos).length} calles, ${puertas.length} puertas`, cuenta);

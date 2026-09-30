@@ -19,7 +19,10 @@ const { ctx } = render;
 ctx.imageSmoothingEnabled = false;
 const entrada = crearEntrada(canvas);
 let audio = null;
-import('./audio/index.js').then((m) => { audio = m.crearAudio(); }).catch(() => {});
+import { crearAudio } from './audio/index.js';
+audio = crearAudio();
+audio.musica(new URLSearchParams(location.search).has('jugar') ? 'pueblo' : 'titulo');
+for (const ev of ['pointerdown', 'keydown', 'touchstart']) addEventListener(ev, () => audio.desbloquear(), { passive: true });
 
 const url = new URLSearchParams(location.search);
 let modo = url.has('jugar') ? 'juego' : 'titulo';
@@ -39,14 +42,13 @@ let prevBits = 0;
 function tick() {
   const bits = entrada.leer();
   const pulsa = bits & ~prevBits; prevBits = bits;
-  if (bits && audio) audio.desbloquear?.();
   t++;
   if (modo === 'titulo') {
     if (pulsa & BOTON.A) { modo = 'juego'; audio?.musica?.('pueblo'); if (guardada) try { cargar(sim, guardada); } catch {} }
     return;
   }
   const e = paso(sim, bits);
-  if (audio) for (const ev of e.eventos) audio.evento?.({ ...ev, camX: render.cam.x + ANCHO / 2 });
+  if (audio) for (const ev of e.eventos) audio.evento({ ...ev, camX: render.cam.x + ANCHO / 2 });
   if (e.f % 600 === 0) localStorage.setItem('belones-partida', guardar(sim));
 }
 

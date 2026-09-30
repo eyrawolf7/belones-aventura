@@ -129,7 +129,7 @@ function pasoDialogo(s, e, pulsa) {
   if (!d.terminado) {
     const antes = d.visibles;
     d.visibles = Math.min(texto.length, d.visibles + 0.75);
-    if (Math.floor(d.visibles) !== Math.floor(antes) && Math.floor(d.visibles) % 2 === 0 && texto[Math.floor(d.visibles) - 1] !== ' ') e.eventos.push({ tipo: 'letra', voz: d.voz });
+    if (Math.floor(d.visibles) !== Math.floor(antes) && Math.floor(d.visibles) % 2 === 0 && texto[Math.floor(d.visibles) - 1] !== ' ') e.eventos.push({ tipo: 'letra', voz: d.voz, c: texto[Math.floor(d.visibles) - 1] });
     if (d.visibles >= texto.length) d.terminado = true;
     if (pulsa & BOTON.A && d.visibles > 2) { d.visibles = texto.length; d.terminado = true; }
     return;
