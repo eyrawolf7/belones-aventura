@@ -27,7 +27,7 @@ export const GLSL_CORTE_VS = /* glsl */ `varying float vProf;`;
 export const GLSL_CORTE_FS = /* glsl */ `
 uniform vec3 uCorte; uniform float uProfJugador; varying float vProf;
 void cortar(){
-  float d = length(gl_FragCoord.xy - uCorte.xy) / uCorte.z;
+  float d = length(gl_FragCoord.xy - uCorte.xy) / (uCorte.z * CORTE_ESCALA);
   if (d < 1. && vProf < uProfJugador - 2.5) {
     float bayer = mod(floor(gl_FragCoord.x) + floor(gl_FragCoord.y) * 2., 4.) / 4.;
     if (bayer > smoothstep(1., .55, d) * .15 + d * .6) discard;
@@ -35,16 +35,16 @@ void cortar(){
 }`;
 
 // Engancha código GLSL a un material estándar de three sin perder luces ni sombras.
-export function parchear(mat, { vsCab = '', vsFin = '', fsCab = '', color = '', corte = false }) {
+export function parchear(mat, { vsCab = '', vsFin = '', fsCab = '', color = '', corte = false, corteEscala = 1 }) {
   mat.onBeforeCompile = (sh) => {
     Object.assign(sh.uniforms, U);
     sh.vertexShader = sh.vertexShader
       .replace('#include <common>', `#include <common>\n${corte ? GLSL_CORTE_VS : ''}\n${vsCab}`)
       .replace('#include <project_vertex>', `#include <project_vertex>\n${corte ? 'vProf = -mvPosition.z;' : ''}\n${vsFin}`);
     sh.fragmentShader = sh.fragmentShader
-      .replace('#include <common>', `#include <common>\n${GLSL_RUIDO}\n${corte ? GLSL_CORTE_FS : ''}\n${fsCab}`)
+      .replace('#include <common>', `#include <common>\n#define CORTE_ESCALA ${corteEscala.toFixed(2)}\n${GLSL_RUIDO}\n${corte ? GLSL_CORTE_FS : ''}\n${fsCab}`)
       .replace('#include <color_fragment>', `#include <color_fragment>\n${corte ? 'cortar();' : ''}\n${color}`);
   };
-  mat.customProgramCacheKey = () => (corte ? 'c' : '') + color.length + vsFin.length;
+  mat.customProgramCacheKey = () => (corte ? 'c' + corteEscala : '') + color.length + vsFin.length;
   return mat;
 }

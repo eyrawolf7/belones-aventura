@@ -1,6 +1,6 @@
 // Vecinos de Los Belones. `lugar` va relativo al rótulo de una calle real (o en baldosas).
 // Los textos se parten en páginas con «|». Habla del Campo de Cartagena, con cariño.
-export const inicio = { i: 259, j: 415 };
+export const inicio = { i: 259, j: 412 };
 // zona de prueba HD-2D: la plaza, la calle Mayor de Botica a la carretera y el principio de Botica
 export const zona = {
   i0: 215, j0: 392, i1: 290, j1: 440,

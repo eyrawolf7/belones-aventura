@@ -72,7 +72,7 @@ export function crearRender3D(canvas, mundo, { zona, calidad = 'alta', extra = {
   const dirSol = new THREE.Vector3(-0.62, 0.55, 0.36).normalize().multiplyScalar(80);
 
   const camara = new THREE.PerspectiveCamera(30, 16 / 9, 1, 400);
-  const PITCH = (56 * Math.PI) / 180, DIST = 34;
+  const PITCH = (50 * Math.PI) / 180, DIST = 22;
   const cam = { x: 0, z: 0, iniciada: false };
 
   let composer = null, maqueta = null;
