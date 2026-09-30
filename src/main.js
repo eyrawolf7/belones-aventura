@@ -4,6 +4,7 @@ import * as vecinos from './data/vecinos.js';
 import { cargarMundo } from './sim/mundo.js';
 import { crearSim, paso, guardar, cargar, BOTON } from './sim/sim.js';
 import { crearRender, ANCHO, ALTO } from './render/provisional.js';
+import { crearRender3D } from './render3d/escena.js';
 import { crearEntrada } from './input/index.js';
 import { pintarHud } from './ui/hud.js';
 import { pintarDialogo } from './ui/dialogo.js';
@@ -13,10 +14,23 @@ import { pintarTactil } from './ui/tactil.js';
 
 const canvas = document.getElementById('juego');
 canvas.width = ANCHO; canvas.height = ALTO;
+const url0 = new URLSearchParams(location.search);
 const mundo = cargarMundo(mundoJson);
 const datos = { inicio: vecinos.inicio, vecinos: vecinos.vecinos };
-const render = crearRender(canvas, mundo);
-const { ctx } = render;
+const en2D = url0.get('r') === '2d';
+// zona de prueba: todo lo de fuera es sólido (bordes cerrados)
+const Z = vecinos.zona;
+if (Z && !en2D) for (let j = 0; j < mundo.H; j++) for (let i = 0; i < mundo.W; i++) if (i < Z.i0 || i > Z.i1 || j < Z.j0 || j > Z.j1) mundo.solido[j * mundo.W + i] = 1;
+// el pavimento de la plaza (trazado sobre la ortofoto) cuenta como plaza también para la simulación
+const dentroPoly = (pts, x, y) => { let r = false; for (let a = 0, b = pts.length - 1; a < pts.length; b = a++) { const [xa, ya] = pts[a], [xb, yb] = pts[b]; if ((ya > y) !== (yb > y) && x < ((xb - xa) * (y - ya)) / (yb - ya) + xa) r = !r; } return r; };
+if (Z?.plazas && !en2D) for (let j = Z.j0; j <= Z.j1; j++) for (let i = Z.i0; i <= Z.i1; i++) {
+  const n = j * mundo.W + i;
+  if (!mundo.edif[n] && Z.plazas.some((p) => dentroPoly(p, i + 0.5, j + 0.5))) { mundo.suelo[n] = 122; mundo.solido[n] = 0; }
+}
+for (const [i, j] of mundo.arboles) mundo.solido[j * mundo.W + i] = 1;
+const esTactil = 'ontouchstart' in window;
+const render = en2D ? crearRender(canvas, mundo) : crearRender3D(document.getElementById('mundo'), mundo, { zona: Z, calidad: url0.get('q') || (esTactil ? 'media' : 'alta') });
+const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
 const entrada = crearEntrada(canvas);
 let audio = null;
@@ -49,15 +63,17 @@ function tick() {
     return;
   }
   const e = paso(sim, bits);
-  if (audio) for (const ev of e.eventos) audio.evento({ ...ev, camX: render.cam.x + ANCHO / 2 });
+  if (audio) for (const ev of e.eventos) audio.evento({ ...ev, camX: en2D ? render.cam.x + ANCHO / 2 : render.cam.x * 8 });
   if (e.f % 600 === 0) localStorage.setItem('belones-partida', guardar(sim));
 }
 
 function pintar() {
   ctx.imageSmoothingEnabled = false;
   if (modo === 'titulo') { pintarTitulo(ctx, t, [], 0); return; }
+  canvas.style.background = 'transparent';
   const e = sim.estado;
-  render.pintar(e);
+  if (!en2D) ctx.clearRect(0, 0, ANCHO, ALTO);
+  render.pintar(e, datos);
   const j = e.jugador;
   pintarHud(ctx, { vida: j.vida, vidaMax: j.vidaMax, monedas: j.chavos, zona: mundo.nombresCalle[e.calle] || null, zonaT: e.calleT }, t);
   if (e.dialogo) {
@@ -93,9 +109,9 @@ requestAnimationFrame(bucle);
 
 // gancho de pruebas
 window.__game = {
-  get sim() { return sim; }, mundo, BOTON,
+  get sim() { return sim; }, mundo, BOTON, render,
   start(semilla = 1) { sim = crearSim(mundo, datos, semilla); modo = 'juego'; },
   step(n = 1, bits = 0) { for (let i = 0; i < n; i++) { const e = paso(sim, bits); } pintar(); },
-  teleport(i, j) { sim.estado.jugador.x = (i * 16 + 8) * 16; sim.estado.jugador.y = (j * 16 + 14) * 16; render.cam.x = -1e4; pintar(); },
+  teleport(i, j) { sim.estado.jugador.x = (i * 16 + 8) * 16; sim.estado.jugador.y = (j * 16 + 14) * 16; render.cam.x = -1e4; render.cam.iniciada = false; pintar(); },
   pintar,
 };

@@ -26,7 +26,7 @@ export function cargarMundo(json) {
   return {
     W, H, suelo, edif, calle, solido,
     edificios: json.edificios, arboles: json.arboles, calles: json.calles, nombresCalle: json.nombresCalle || [],
-    puertas: json.puertas || [],
+    puertas: json.puertas || [], vias: json.vias || [],
   };
 }
 

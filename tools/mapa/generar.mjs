@@ -129,7 +129,10 @@ const datosEd = edificios.map((b) => {
     puertaEn: a.doorBay || null, arco: !!a.arch, persiana: a.blind ?? null, chimenea: !!a.chimney, valla: a.fence && a.fence !== 'none' ? { tipo: a.fence, color: a.fenceColor || null } : null,
     bajoColor: a.groundColor || null, rotulos: (a.signs || []).map((r) => ({ t: r.texto, b: r.banda, l: r.letra })),
   };
-  return { ref: b.refcat, uso: b.use || '', plantas: a?.floors || b.maxFloors || 1, anyo: b.year ? +b.year : 0, calle: b.near?.name || (d ? via(d.via) : null), numero: d?.numero || null, c: [Math.round(ci), Math.round(cj)], aspecto };
+  return { ref: b.refcat, uso: b.use || '', plantas: a?.floors || b.maxFloors || 1, anyo: b.year ? +b.year : 0, calle: b.near?.name || (d ? via(d.via) : null), numero: d?.numero || null, c: [Math.round(ci), Math.round(cj)], aspecto,
+    // planta real en baldosas (x este, y sur), para levantar el volumen en 3D
+    polys: b.polygons.map((p) => p.map(([x, z]) => aBaldosa(x, z).map((v) => Math.round(v * 100) / 100))),
+    partes: (b.parts || []).map((q) => ({ plantas: q.floors || 1, polys: q.polygons.map((p) => p.map(([x, z]) => aBaldosa(x, z).map((v) => Math.round(v * 100) / 100))) })) };
 });
 
 // rótulos de calle: punto medio del tramo más largo de cada nombre
@@ -172,6 +175,8 @@ const mundo = {
   edificios: datosEd,
   arboles,
   calle: Buffer.from(calle.buffer).toString('base64'),
+  // ejes reales de las calles en baldosas, con su ancho en baldosas (para pintar el suelo con curvas)
+  vias: calles.map((c) => ({ w: Math.round(Math.max(4.4, c.width || 5) / M * 100) / 100, plaza: esPlaza(c) ? 1 : 0, p: c.points.map(([x, z]) => aBaldosa(x, z).map((v) => Math.round(v * 100) / 100)) })),
   nombresCalle,
   puertas,
   calles: Object.entries(rotulos).map(([nombre, r]) => ({ nombre, i: r.i, j: r.j })),

@@ -16,7 +16,7 @@ pag.on('pageerror', (e) => errores.push(e.message));
 pag.on('console', (m) => { if (m.type() === 'error') errores.push(m.text()); });
 await pag.setViewport({ width: +(args.ancho || 1152), height: +(args.alto || 648), deviceScaleFactor: 1 });
 await pag.goto(URL + (args.titulo ? '' : '?jugar'), { waitUntil: 'networkidle0' });
-await pag.waitForFunction(() => window.__game);
+try { await pag.waitForFunction(() => window.__game, { timeout: 15000 }); } catch (e) { console.log('ERRORES:\n' + errores.join('\n')); await nav.close(); process.exit(1); }
 await pag.evaluate(() => { window.__freeze = true; });
 if (args.titulo) {
   await pag.screenshot({ path: `${carpeta}/titulo.png` });
