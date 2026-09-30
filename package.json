@@ -20,6 +20,6 @@
     "vite-plugin-singlefile": "^2.3.3"
   },
   "dependencies": {
-    "three": "^0.186.1"
+    "phaser": "^4.2.1"
   }
 }

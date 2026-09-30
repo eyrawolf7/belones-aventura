@@ -4,7 +4,7 @@ import * as vecinos from './data/vecinos.js';
 import { cargarMundo } from './sim/mundo.js';
 import { crearSim, paso, guardar, cargar, BOTON } from './sim/sim.js';
 import { crearRender, ANCHO, ALTO } from './render/provisional.js';
-import { crearRender3D } from './render3d/escena.js';
+import { crearRender2D } from './render2d/escena.js';
 import { crearEntrada } from './input/index.js';
 import { pintarHud } from './ui/hud.js';
 import { pintarDialogo } from './ui/dialogo.js';
@@ -29,7 +29,7 @@ if (Z?.plazas && !en2D) for (let j = Z.j0; j <= Z.j1; j++) for (let i = Z.i0; i 
 }
 for (const [i, j] of mundo.arboles) mundo.solido[j * mundo.W + i] = 1;
 const esTactil = 'ontouchstart' in window;
-const render = en2D ? crearRender(canvas, mundo) : crearRender3D(document.getElementById('mundo'), mundo, { zona: Z, calidad: url0.get('q') || (esTactil ? 'media' : 'alta') });
+const render = en2D ? crearRender(canvas, mundo) : crearRender2D(document.getElementById('mundo'), mundo, { zona: Z });
 const ctx = canvas.getContext('2d');
 ctx.imageSmoothingEnabled = false;
 const entrada = crearEntrada(canvas);
@@ -46,6 +46,12 @@ let t = 0;
 const guardada = localStorage.getItem('belones-partida');
 
 function escalar() {
+  if (!en2D && render.game?.canvas) {
+    // la interfaz de píxel va encima del lienzo de Phaser, con el mismo tamaño y sitio
+    const r = render.game.canvas.getBoundingClientRect();
+    Object.assign(canvas.style, { position: 'fixed', left: r.left + 'px', top: r.top + 'px', width: r.width + 'px', height: r.height + 'px' });
+    return;
+  }
   // escala entera en píxeles del dispositivo (en el móvil a 844×390 con DPR 3 sale ×5)
   const dpr = devicePixelRatio || 1;
   const k = Math.max(1, Math.floor(Math.min((innerWidth * dpr) / ANCHO, (innerHeight * dpr) / ALTO)));
@@ -85,6 +91,7 @@ function pintar() {
     texto(ctx, '¡Uy! Te has quedao sin corazones.', ANCHO / 2, 90, '#fff', { alinear: 'centro' });
     if (j.muerto > 150) texto(ctx, 'Pulsa A para volver a la plaza', ANCHO / 2, 110, '#f2c14e', { alinear: 'centro' });
   }
+  escalar();
   if (entrada.hayTactil()) pintarTactil(ctx, entrada, bitsPintados);
   if (innerHeight > innerWidth) {
     ctx.fillStyle = '#1d1420ee'; ctx.fillRect(0, 0, ANCHO, ALTO);

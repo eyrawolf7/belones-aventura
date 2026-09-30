@@ -10,12 +10,12 @@
     html, body { margin: 0; height: 100%; background: #1d1420; overflow: hidden; touch-action: none; -webkit-user-select: none; user-select: none; }
     body { display: flex; align-items: center; justify-content: center; }
     canvas { image-rendering: pixelated; image-rendering: crisp-edges; display: block; }
-    #mundo { position: fixed; inset: 0; image-rendering: auto; }
+    #mundo { position: fixed; inset: 0; }
     #juego { position: relative; z-index: 1; }
   </style>
 </head>
 <body>
-  <canvas id="mundo"></canvas>
+  <div id="mundo"></div>
   <canvas id="juego"></canvas>
   <script type="module" src="/src/main.js"></script>
 </body>

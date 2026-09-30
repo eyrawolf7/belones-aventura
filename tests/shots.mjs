@@ -25,6 +25,7 @@ if (args.titulo) {
   if (args.en) { const [i, j] = String(args.en).split(',').map(Number); await pag.evaluate((i, j) => window.__game.teleport(i, j), i, j); }
   const pasos = +(args.pasos || 60);
   await pag.evaluate((n) => window.__game.step(n), pasos);
+  await new Promise((r) => setTimeout(r, 400));
   await pag.screenshot({ path: `${carpeta}/juego.png` });
 }
 console.log(errores.length ? 'ERRORES:\n' + errores.join('\n') : 'sin errores', '→', carpeta);
