@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Belones · prueba de sonido</title>
+<style>
+  body { font: 16px/1.4 system-ui, sans-serif; background: #1f2a33; color: #f3ead8; margin: 0; padding: 16px; }
+  h1 { font-size: 20px; margin: 0 0 12px; }
+  h2 { font-size: 15px; margin: 18px 0 6px; color: #f4c56a; }
+  button { font: inherit; background: #3b4f5e; color: #f3ead8; border: 0; border-radius: 8px; padding: 10px 14px; margin: 3px; cursor: pointer; }
+  button:active, button.on { background: #e0874c; color: #1f2a33; }
+  label { display: inline-flex; align-items: center; gap: 8px; margin: 4px 14px 4px 0; }
+  #texto { background: #f3ead8; color: #1f2a33; border-radius: 8px; padding: 10px 14px; min-height: 26px; max-width: 640px; font-size: 18px; }
+  small { color: #a9b6bf; }
+</style>
+</head>
+<body>
+<h1>Belones · prueba de sonido</h1>
+<small>Sírvelo con <code>npm run dev</code> y abre <code>/src/audio/demo.html</code>. El primer toque desbloquea el audio. Teclas: 1-6 temas, espacio = espada.</small>
+
+<h2>Música</h2>
+<div id="temas"></div>
+
+<h2>Efectos</h2>
+<div id="efectos"></div>
+<label>Panorama (x respecto a la cámara) <input id="pan" type="range" min="-192" max="192" value="0"></label>
+<label>Suelo del paso
+  <select id="suelo"><option value="">tierra</option><option value="h">hierba</option><option value="a">asfalto/piedra</option><option value="e">arena</option><option value="w">agua</option></select>
+</label>
+
+<h2>Diálogo</h2>
+<label>Voz <input id="voz" type="range" min="0" max="7" value="3"> <span id="vozN">3</span></label>
+<button id="hablar">Hablar con un vecino</button>
+<div id="texto"></div>
+
+<h2>Pruebas</h2>
+<button id="estres">80 efectos a la vez</button>
+<button id="monedas">Ristra de monedas</button>
+<button id="pasos">Caminar 3 s</button>
+
+<h2>Volumen</h2>
+<label>Música <input id="vm" type="range" min="0" max="100" value="80"></label>
+<label>Efectos <input id="ve" type="range" min="0" max="100" value="90"></label>
+<label><input id="mudo" type="checkbox"> Silenciar</label>
+
+<script type="module">
+import { crearAudio } from './index.js';
+const audio = crearAudio();
+window.audio = audio;
+const $ = (id) => document.getElementById(id);
+const desbloquear = () => audio.desbloquear();
+addEventListener('pointerdown', desbloquear, { capture: true });
+addEventListener('keydown', desbloquear, { capture: true });
+
+const TEMAS = ['titulo', 'pueblo', 'campo', 'mina', 'peligro', 'silencio'];
+for (const t of TEMAS) {
+  const b = document.createElement('button'); b.textContent = t; b.dataset.tema = t;
+  b.onclick = () => { audio.musica(t); marcar(); };
+  $('temas').append(b);
+}
+function marcar() { for (const b of $('temas').children) b.classList.toggle('on', b.dataset.tema === audio.tema); }
+
+const EFECTOS = ['paso', 'espada', 'golpe', 'daño', 'muerte', 'recoger', 'corazon', 'hablar', 'letra', 'pagina', 'puerta', 'cofre', 'secreto', 'objeto', 'menu', 'seleccion', 'arbusto'];
+const ev = (tipo, extra = {}) => audio.evento({ tipo, x: Number($('pan').value), camX: 0, suelo: $('suelo').value || undefined, voz: Number($('voz').value), ...extra });
+for (const e of EFECTOS) { const b = document.createElement('button'); b.textContent = e; b.onclick = () => ev(e); $('efectos').append(b); }
+
+$('voz').oninput = () => { $('vozN').textContent = $('voz').value; };
+const FRASES = ['¡Buenas, zagal! ¿Vienes de la huerta?', 'Dicen que en la sierra minera todavía se oye cantar a los mineros.', 'Si bajas al Mar Menor, tráeme unas pocas conchas, anda.'];
+let escribiendo = null, frase = 0;
+$('hablar').onclick = () => {
+  clearInterval(escribiendo);
+  const txt = FRASES[frase++ % FRASES.length];
+  ev('hablar');
+  let i = 0; $('texto').textContent = '';
+  escribiendo = setInterval(() => {
+    if (i >= txt.length) { clearInterval(escribiendo); return; }
+    const c = txt[i++]; $('texto').textContent += c;
+    if (i % 2 === 0) ev('letra', { c });   // como la simulación: un sonidito cada dos letras
+  }, 33);
+};
+
+$('estres').onclick = () => { const t = ['golpe', 'espada', 'recoger', 'paso', 'daño', 'arbusto', 'objeto', 'letra']; for (let k = 0; k < 80; k++) audio.evento({ tipo: t[k % 8], x: (k * 37) % 300 - 150, camX: 0 }); };
+$('monedas').onclick = () => { for (let k = 0; k < 7; k++) setTimeout(() => ev('recoger', { x: -150 + k * 50 }), k * 180); };
+$('pasos').onclick = () => { for (let k = 0; k < 11; k++) setTimeout(() => ev('paso'), k * 267); };
+
+$('vm').oninput = $('ve').oninput = () => audio.volumen($('vm').value / 100, $('ve').value / 100);
+$('mudo').onchange = () => audio.silenciar($('mudo').checked);
+
+addEventListener('keydown', (e) => {
+  const k = Number(e.key);
+  if (k >= 1 && k <= 6) { audio.musica(TEMAS[k - 1]); marcar(); }
+  if (e.code === 'Space') { e.preventDefault(); ev('espada'); }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,7 @@
+node_modules/
+dist/
+.noche/
+builds-noche/
+.DS_Store
+tests/out/
+src/ui/capturas/

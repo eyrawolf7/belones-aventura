@@ -1,0 +1,2 @@
+# los WAV se regeneran con node tests/sonido/render.mjs (pesan decenas de MB)
+*.wav

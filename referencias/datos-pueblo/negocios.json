@@ -1,0 +1,275 @@
+[
+ {
+  "name": "Tien21 Belhogar",
+  "numero": "12",
+  "refcat": "6465107XG9666N",
+  "alt": [],
+  "type": "Tien21 Belhogar 4,7(168) Tienda de electrodomésti"
+ },
+ {
+  "name": "Estanco Los Belones, IQOS OFFICIAL RESELLER",
+  "numero": "12",
+  "refcat": "6465107XG9666N",
+  "alt": [],
+  "type": "Estanco Los Belones, IQOS OFFICIAL RESELLER 4,6(52"
+ },
+ {
+  "name": "Punto Nickel - ESTANCO LOS BELONES - EXPENDEDURIA LOS BELONES",
+  "numero": "12",
+  "refcat": "6465107XG9666N",
+  "alt": [],
+  "type": "Punto Nickel - ESTANCO LOS BELONES - EXPENDEDURIA "
+ },
+ {
+  "name": "sociedad recreativa la oriental",
+  "numero": "13",
+  "refcat": "6264501XG9666S",
+  "alt": [],
+  "type": "sociedad recreativa la oriental 4,4(44)"
+ },
+ {
+  "name": "KING KEBAB Y PIZZERÍA",
+  "numero": "15",
+  "refcat": "6264402XG9666S",
+  "alt": [],
+  "type": "kebab",
+  "inferido": true
+ },
+ {
+  "name": "Los Belones Centro Óptico",
+  "numero": "17",
+  "refcat": "6264402XG9666S",
+  "alt": [],
+  "type": "Los Belones Centro Óptico 4,8(48) Óptica"
+ },
+ {
+  "name": "Cajamar Caja Rural",
+  "numero": "19",
+  "refcat": "6264401XG9666S",
+  "alt": [],
+  "type": "Cajamar Caja Rural 2,8(11) Banco"
+ },
+ {
+  "name": "CaixaBank",
+  "numero": "21",
+  "refcat": "6264401XG9666S",
+  "alt": [],
+  "type": "banco",
+  "inferido": true
+ },
+ {
+  "name": "Asesoría Celestino Conesa García",
+  "numero": "24",
+  "refcat": "6265703XG9666N",
+  "alt": [],
+  "type": "Asesoría Celestino Conesa García 4,3(6) Asesor fi"
+ },
+ {
+  "name": "MEDINASOL SERVICIOS",
+  "numero": "26",
+  "refcat": "6265702XG9666N",
+  "alt": [],
+  "type": "MEDINASOL SERVICIOS 4,7(183) Agencia inmobiliaria"
+ },
+ {
+  "name": "Bar Shay",
+  "numero": "28",
+  "refcat": "6265905XG9666N",
+  "alt": [],
+  "type": "Bar Shay 4,5(60)"
+ },
+ {
+  "name": "Ruby's Plaice fish and chips",
+  "numero": "30",
+  "refcat": "6265906XG9666N",
+  "alt": [],
+  "type": "Ruby's Plaice fish and chips 4,9(37)"
+ },
+ {
+  "name": "Hotshotz",
+  "numero": "30",
+  "refcat": "6265906XG9666N",
+  "alt": [],
+  "type": "Hotshotz No hay reseñas Bar"
+ },
+ {
+  "name": "Dulce Bach",
+  "numero": "32",
+  "refcat": "6265907XG9666N",
+  "alt": [],
+  "type": "Dulce Bach 4,7(82)"
+ },
+ {
+  "name": "Cafe Bar El Tato",
+  "numero": "32",
+  "refcat": "6265907XG9666N",
+  "alt": [],
+  "type": "Cafe Bar El Tato 4,2(703)"
+ },
+ {
+  "name": "ELAS FASHION",
+  "numero": "37",
+  "refcat": "6164301XG9666S",
+  "alt": [],
+  "type": "ELAS FASHION 5,0(9) Tienda de moda de alta costur"
+ },
+ {
+  "name": "Peluqueria Monica",
+  "numero": "37",
+  "refcat": "6164301XG9666S",
+  "alt": [],
+  "type": "Peluqueria Monica 4,5(120) Peluquería"
+ },
+ {
+  "name": "Paras Indian Restaurant",
+  "numero": "38",
+  "refcat": "6165614XG9666N",
+  "alt": [],
+  "type": "restaurante",
+  "inferido": true
+ },
+ {
+  "name": "los osos golosos",
+  "numero": "45",
+  "refcat": "6064502XG9666S",
+  "alt": [],
+  "type": "golosinas",
+  "inferido": true
+ },
+ {
+  "name": "Alarcon cocinas",
+  "numero": "49",
+  "refcat": "6064501XG9666S",
+  "alt": [],
+  "type": "Alarcon cocinas 4,9(17) Tienda de muebles de coci"
+ },
+ {
+  "name": "DreaMs",
+  "numero": "51",
+  "refcat": "6064501XG9666S",
+  "alt": [],
+  "type": "tienda",
+  "inferido": true
+ },
+ {
+  "name": "Bed's",
+  "numero": "51",
+  "refcat": "6064501XG9666S",
+  "alt": [],
+  "type": "colchonería",
+  "inferido": true
+ },
+ {
+  "name": "Scabetti",
+  "numero": "51",
+  "refcat": "6064501XG9666S",
+  "alt": [],
+  "type": "tienda",
+  "inferido": true
+ },
+ {
+  "name": "Antonio Cuello Joyero",
+  "numero": "53",
+  "refcat": "6064201XG9666S",
+  "alt": [],
+  "type": "Antonio Cuello Joyero 4,7(34) Joyería"
+ },
+ {
+  "name": "Murcia Villas",
+  "numero": "55",
+  "refcat": "6064201XG9666S",
+  "alt": [],
+  "type": "inmobiliaria",
+  "inferido": true
+ },
+ {
+  "name": "Brasería Garnacha / Restaurantes en los Belones",
+  "numero": "61",
+  "refcat": "5964402XG9656S",
+  "alt": [],
+  "type": "Brasería Garnacha / Restaurantes en los Belones 4,"
+ },
+ {
+  "name": "MC Gestoría",
+  "numero": "63",
+  "refcat": "5964501XG9656S",
+  "alt": [],
+  "type": "gestoría",
+  "inferido": true
+ },
+ {
+  "name": "Zapatería Celeste",
+  "numero": "65",
+  "refcat": "5964501XG9656S",
+  "alt": [],
+  "type": "zapatería",
+  "inferido": true
+ },
+ {
+  "name": "JewellFurniture",
+  "numero": "66",
+  "refcat": "6165925XG9666N",
+  "alt": [],
+  "type": "muebles",
+  "inferido": true
+ },
+ {
+  "name": "Aloha moda&complementos",
+  "numero": "67",
+  "refcat": "5965101XG9656S",
+  "alt": [],
+  "type": "Aloha moda&complementos 4,9(25) Tienda de ropa"
+ },
+ {
+  "name": "Annapurna Nepali Restaurant",
+  "numero": "67",
+  "refcat": "5965101XG9656S",
+  "alt": [],
+  "type": "Annapurna Nepali Restaurant 4,9(206)"
+ },
+ {
+  "name": "Blue Med",
+  "numero": "67",
+  "refcat": "5965101XG9656S",
+  "alt": [],
+  "type": "Blue Med 4,6(16) Agencia inmobiliaria"
+ },
+ {
+  "name": "Thai Cafe",
+  "numero": "68",
+  "refcat": "6165924XG9666N",
+  "alt": [],
+  "type": "Thai Cafe 4,8(307)"
+ },
+ {
+  "name": "Vivero Divama",
+  "numero": "69",
+  "refcat": "5965101XG9656S",
+  "alt": [],
+  "type": "vivero",
+  "inferido": true
+ },
+ {
+  "name": "Messeguer Barber Shop",
+  "numero": "78",
+  "refcat": "6065902XG9666N",
+  "alt": [],
+  "type": "barbería",
+  "inferido": true
+ },
+ {
+  "name": "Trattoria Via Romana",
+  "numero": "84",
+  "refcat": "6065903XG9666N",
+  "alt": [],
+  "type": "restaurante",
+  "inferido": true
+ },
+ {
+  "name": "Clínica dental Muaks",
+  "numero": "94",
+  "refcat": "5965507XG9656N",
+  "alt": [],
+  "type": "Clínica dental Muaks 4,5(24) Dentista"
+ }
+]

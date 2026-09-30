@@ -1,0 +1,7 @@
+{
+  "hooks": {
+    "Stop": [
+      { "hooks": [ { "type": "command", "command": "sh \"$CLAUDE_PROJECT_DIR/noche/hook-stop.sh\"", "timeout": 120 } ] }
+    ]
+  }
+}

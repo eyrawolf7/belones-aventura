@@ -1,0 +1,22 @@
+{
+  "name": "belones-aventura",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Aventura de acción desde arriba ambientada en Los Belones (Cartagena).",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "mapa": "node tools/mapa/generar.mjs",
+    "arte": "node tools/arte/generar.mjs",
+    "test": "node tests/sim-checks.mjs",
+    "bot": "node tests/bot.mjs",
+    "qa": "node tests/qa.mjs",
+    "puerta": "sh noche/puerta.sh"
+  },
+  "devDependencies": {
+    "puppeteer": "^23.0.0",
+    "vite": "^8.3.1",
+    "vite-plugin-singlefile": "^2.3.3"
+  }
+}
