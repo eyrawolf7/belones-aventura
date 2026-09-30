@@ -62,6 +62,6 @@ vuelta de críticos por tarea (`.claude/agents/`): `juego-director-arte` tras ca
 
 ## Límites
 
-- Publicar (push, GitHub Pages, APK) solo cuando Víctor lo pida, con la cuenta **eyrawolf7**.
+- **Publicar SIEMPRE** en https://eyrawolf7.github.io/belones-aventura/ al terminar cada cambio que Víctor tenga que ver: él prueba desde el móvil y no tiene otra forma. Basta con `git push` a `main` (cuenta **eyrawolf7**, nunca la del trabajo): GitHub Actions compila y publica en ~40 s. Comprueba después con `GAME_URL=https://eyrawolf7.github.io/belones-aventura/ node tests/movil.mjs`. El turno autónomo NO publica (trabaja en ramas); publica la sesión principal al integrar.
 - No mates procesos que no hayas lanzado tú (nada de `pkill` genérico): cada carril usa su puerto.
 - No uses el ratón del jugador para nada que no se pueda hacer con mando.
