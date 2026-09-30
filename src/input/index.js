@@ -38,7 +38,9 @@ export function crearEntrada(elemento) {
     if (fx < 0.5) return 'joy';
     return fy > 0.55 && fx > 0.78 ? BOTON.A : fy > 0.55 ? BOTON.B : fx > 0.85 && fy < 0.2 ? BOTON.PAUSA : BOTON.A;
   };
+  let tocado = false;
   const inicio = (e) => {
+    tocado = true;
     for (const t of e.changedTouches) {
       const tipo = botonEn(t.clientX, t.clientY);
       toques.set(t.identifier, { tipo, x0: t.clientX, y0: t.clientY, x: t.clientX, y: t.clientY });
@@ -47,10 +49,10 @@ export function crearEntrada(elemento) {
   };
   const mueve = (e) => { for (const t of e.changedTouches) { const q = toques.get(t.identifier); if (q) { q.x = t.clientX; q.y = t.clientY; } } recalcular(); e.preventDefault(); };
   const fin = (e) => { for (const t of e.changedTouches) toques.delete(t.identifier); recalcular(); e.preventDefault(); };
-  elemento.addEventListener('touchstart', inicio, { passive: false });
-  elemento.addEventListener('touchmove', mueve, { passive: false });
-  elemento.addEventListener('touchend', fin, { passive: false });
-  elemento.addEventListener('touchcancel', fin, { passive: false });
+  document.addEventListener('touchstart', inicio, { passive: false });
+  document.addEventListener('touchmove', mueve, { passive: false });
+  document.addEventListener('touchend', fin, { passive: false });
+  document.addEventListener('touchcancel', fin, { passive: false });
 
   const mando = () => {
     let b = 0;
@@ -67,5 +69,8 @@ export function crearEntrada(elemento) {
     leer: () => teclas | tactil | mando(),
     joy,
     hayTactil: () => toques.size > 0 || 'ontouchstart' in window,
+    tocado: () => { const t = tocado; tocado = false; return t; },
+    toques,
+    elemento,
   };
 }

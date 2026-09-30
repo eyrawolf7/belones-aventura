@@ -9,6 +9,7 @@ import { pintarHud } from './ui/hud.js';
 import { pintarDialogo } from './ui/dialogo.js';
 import { pintarTitulo } from './ui/titulo.js';
 import { texto } from './ui/fuente.js';
+import { pintarTactil } from './ui/tactil.js';
 
 const canvas = document.getElementById('juego');
 canvas.width = ANCHO; canvas.height = ALTO;
@@ -38,13 +39,13 @@ function escalar() {
 }
 addEventListener('resize', escalar); escalar();
 
-let prevBits = 0;
+let prevBits = 0, bitsPintados = 0;
 function tick() {
   const bits = entrada.leer();
-  const pulsa = bits & ~prevBits; prevBits = bits;
+  const pulsa = bits & ~prevBits; prevBits = bits; bitsPintados = bits;
   t++;
   if (modo === 'titulo') {
-    if (pulsa & BOTON.A) { modo = 'juego'; audio?.musica?.('pueblo'); if (guardada) try { cargar(sim, guardada); } catch {} }
+    if (pulsa & BOTON.A || entrada.tocado()) { modo = 'juego'; audio?.musica?.('pueblo'); if (guardada) try { cargar(sim, guardada); } catch {} }
     return;
   }
   const e = paso(sim, bits);
@@ -67,6 +68,11 @@ function pintar() {
     ctx.fillStyle = '#000a'; ctx.fillRect(0, 0, ANCHO, ALTO);
     texto(ctx, '¡Uy! Te has quedao sin corazones.', ANCHO / 2, 90, '#fff', { alinear: 'centro' });
     if (j.muerto > 150) texto(ctx, 'Pulsa A para volver a la plaza', ANCHO / 2, 110, '#f2c14e', { alinear: 'centro' });
+  }
+  if (entrada.hayTactil()) pintarTactil(ctx, entrada, bitsPintados);
+  if (innerHeight > innerWidth) {
+    ctx.fillStyle = '#1d1420ee'; ctx.fillRect(0, 0, ANCHO, ALTO);
+    texto(ctx, 'Gira el móvil en horizontal', ANCHO / 2, 96, '#fff4dc', { alinear: 'centro', escala: 2 });
   }
   if (url.has('fps')) texto(ctx, fps + ' fps', 4, ALTO - 14, '#fff');
 }
